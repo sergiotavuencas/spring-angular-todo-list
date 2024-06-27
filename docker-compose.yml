@@ -1,0 +1,33 @@
+services:
+
+  # app:
+  #   container_name: "todo-list_app"
+  #   build:
+  #     context: ./app
+  #     dockerfile: Dockerfile
+  #   image: todolist_app
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #   - todo-back
+
+  postgres:
+    container_name: "todo_db"
+    restart: always
+    image: postgres:latest
+    environment:
+      - "POSTGRES_USER=todouser"
+      - "POSTGRES_PASSWORD=todopass"
+      - "POSTGRES_DB=todo_db"
+    ports:
+      # If the host port is already in use by another container, even if it's not running at the moment change it, so
+      # you don't have problem after executing "docker-compose up", if you don't know who's the port host, here's an
+      # example if "5432" it's been taken: "HOST_PORT:CONTAINER_PORT" -> "5433:5432".
+      - "5432:5432"
+    networks:
+      - todo-back
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+
+networks:
+  todo-back:
